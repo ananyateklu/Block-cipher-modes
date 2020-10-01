@@ -10,7 +10,6 @@ def convert_bin(acii):
         decimal_vals.append(ord(acii[i]))
     # Type cast decimal to binary
     binary_text = []
-    conversion = ''
     # convert the decimal values to one big array of binary 
     for i in range(0,len(decimal_vals)):
         conversion = bin(decimal_vals[i])
@@ -34,11 +33,12 @@ def encode(plaintext, key):
     binary_shift = [] 
     for i in range(0, len(binary_plain)):
         binary_shift.insert((i+3)%35,binary_plain[i]) 
-    print(binary_shift)
-    print(binary_key)
     # add key mod 2
-
-
+    xor_bits = []
+    for i in range(0, len(binary_key)):
+        xor_bits.append((binary_shift[i]+binary_key[i])%2)
+    return xor_bits
+    
 
 main()
 #def decrypt(ciphertext, key):
