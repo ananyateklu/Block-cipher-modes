@@ -1,7 +1,12 @@
 
+import math as m
+
 def main():
     plaintext = input("Enter plaintext")
-    encode(plaintext, "a5Z#\t")
+    blocks = []
+    binary_plain = convert_bin(plaintext)
+    blocks = to_blocks(binary_plain)
+    #encode(plaintext, "a5Z#\t")
     
 
 def convert_bin(acii):
@@ -28,7 +33,6 @@ def convert_bin(acii):
 def encode(plaintext, key):
     # convert plaintext to binary
     binary_plain = convert_bin(plaintext)
-    print(to_blocks(binary_plain))
     # convert key to binary
     binary_key = convert_bin(key)
     # shift the plaintext three to the right
@@ -44,9 +48,28 @@ def encode(plaintext, key):
 def to_blocks(binary_text):
     block_size = 35
     block_list = []
+    # Check to see if text is already 35 bits
     if (len(binary_text) == block_size):
         block_list.insert(0, binary_text)
+        print("rightSize")
         return block_list
+    # if not, divide into 35 bit blocks
+    block_count = m.ceil(len(binary_text)/35)
+    count = 0
+    while(count < block_count):
+        block = []
+        for i in range(0,35):
+            if (len(binary_text) > (35*count)+i):
+                block.insert(i,binary_text[(35*count)+i]) 
+            else:
+                block.append(0)
+        block_list.insert(count, block)
+        count = count+1
+    return block_list
+
+
+
+
 
 
 
