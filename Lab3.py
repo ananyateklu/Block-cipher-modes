@@ -1,7 +1,8 @@
-import binascii
+
 def main():
     plaintext = input("Enter plaintext")
     encode(plaintext, "a5Z#\t")
+    
 
 def convert_bin(acii):
     decimal_vals = []
@@ -27,6 +28,7 @@ def convert_bin(acii):
 def encode(plaintext, key):
     # convert plaintext to binary
     binary_plain = convert_bin(plaintext)
+    print(to_blocks(binary_plain))
     # convert key to binary
     binary_key = convert_bin(key)
     # shift the plaintext three to the right
@@ -38,6 +40,16 @@ def encode(plaintext, key):
     for i in range(0, len(binary_key)):
         xor_bits.append((binary_shift[i]+binary_key[i])%2)
     return xor_bits
+
+def to_blocks(binary_text):
+    block_size = 35
+    block_list = []
+    if (len(binary_text) == block_size):
+        block_list.insert(0, binary_text)
+        return block_list
+
+
+
     
 
 main()
