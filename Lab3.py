@@ -1,28 +1,43 @@
 import binascii
 def main():
     plaintext = input("Enter plaintext")
-    encode(plaintext, "poop")
+    encode(plaintext, "a5Z#\t")
 
-
-
-
-def encode(plaintext, key):
+def convert_bin(acii):
     decimal_vals = []
     # Type cast plaintext to acii chars
-    for i in range(0, len(plaintext)):
-        decimal_vals.append(ord(plaintext[i]))
+    for i in range(0, len(acii)):
+        decimal_vals.append(ord(acii[i]))
     # Type cast decimal to binary
     binary_text = []
-    conversion = '' 
+    conversion = ''
+    # convert the decimal values to one big array of binary 
     for i in range(0,len(decimal_vals)):
         conversion = bin(decimal_vals[i])
         conversion = conversion[2:]
+        # accounting for padding if binary < 7 bits
+        if(len(conversion)<7):
+            padlen = 7-len(conversion)
+            padstr = "0" * padlen
+            conversion = padstr+conversion                
         for j in range(0,len(conversion)):
             binary_text.insert((7*i+j), int(conversion[j]))
-    print(binary_text)
-    # for i in range(0, len(plaintext)):
-    #     block[i] = plaintext[i+3%35]
-    #     print(plaintext)
+    return binary_text
+
+
+def encode(plaintext, key):
+    # convert plaintext to binary
+    binary_plain = convert_bin(plaintext)
+    # convert key to binary
+    binary_key = convert_bin(key)
+    # shift the plaintext three to the right
+    binary_shift = [] 
+    for i in range(0, len(binary_plain)):
+        binary_shift.insert((i+3)%35,binary_plain[i]) 
+    print(binary_shift)
+    print(binary_key)
+    # add key mod 2
+
 
 
 main()
