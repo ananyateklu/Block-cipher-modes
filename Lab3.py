@@ -34,7 +34,32 @@ def convert_bin(acii):
             binary_text.insert((7*i+j), int(conversion[j]))
     return binary_text
 
-
+def decode(cipherblock,key):
+    # convert key to binary
+    binary_key = convert_bin(key)
+    # shift the cipher block three to the left(reverse diffusion)
+    binary_reverse_shift = []
+    for i in range(0,len(cipherblock)):
+        binary_reverse_shift.insert((i-3)%35,cipherblock[i])
+    print(binary_reverse_shift,"reversed")
+    print(binary_key,"key")
+    # add key mod 2
+    xor_bits = []
+    for i in range(0, len(binary_key)):
+        xor_bits.insert(i,(binary_reverse_shift[i] + binary_key[i])%2)
+    print(xor_bits,"xor")
+    binary_combined = ""
+    for i in xor_bits:
+        binary_combined += str(i)
+    split_binary = " ".join(binary_combined[i:i+7] for i in range(0, len(binary_combined), 7))  
+    print(split_binary,"binary")
+    ascii_string = ""
+    for i in split_binary.split():
+        an_integer = int(i,2)
+        ascii_character = chr(an_integer)
+        ascii_string += ascii_character
+    print(ascii_string)
+    
 def encode(plaintext, key):
     # convert key to binary
     binary_key = convert_bin(key)
