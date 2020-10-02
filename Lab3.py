@@ -10,9 +10,8 @@ def main():
     # convert plain to blocks of binary
     blocks = to_blocks(plaintext)
     # encode blocks
-    for i in range(0,len(blocks)):
-        print(encode(blocks[i],key))
     #encode(plaintext, "a5Z#\t")
+    ecb_mode(plaintext, key,)
     
 
 def convert_bin(acii):
@@ -73,6 +72,26 @@ def to_blocks(plaintext):
         count = count+1
     return block_list
 
+def ecb_mode(plaintext, key,):
+    blocks = [] 
+    # convert plaintext to blocks of binary
+    blocks = to_blocks(plaintext)
+    # encode blocks
+    encoded_blocks = []
+    for i in range(0,len(blocks)):
+        encoded_blocks.insert(i,encode(blocks[i],key))
+    #encode(plaintext, "a5Z#\t")
+    for i in range(0, len(encoded_blocks)):
+        result = str(encoded_blocks[i])
+        print(result)
+        punc = ''', '''
+        result = result.replace(punc, "")
+        result = result[1:36]
+        print(result)
+        for j in range(0,5):
+            print (result[j:j+1*7], end = " ")
+            
+        
 
 
 
