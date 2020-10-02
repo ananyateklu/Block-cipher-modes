@@ -33,7 +33,7 @@ def convert_bin(acii):
         for j in range(0,len(conversion)):
             binary_text.insert((7*i+j), int(conversion[j]))
     return binary_text
-
+#test
 def decode(cipherblock,key):
     # convert key to binary
     binary_key = convert_bin(key)
