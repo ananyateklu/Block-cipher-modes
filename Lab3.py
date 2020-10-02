@@ -32,7 +32,7 @@ def convert_bin(acii):
             conversion = padstr+conversion                
         for j in range(0,len(conversion)):
             binary_text.insert((7*i+j), int(conversion[j]))
-    return binary_text
+    return binary_text  
 
 
 def encode(plaintext, key):
@@ -45,7 +45,7 @@ def encode(plaintext, key):
     # add key mod 2
     xor_bits = []
     for i in range(0, len(binary_key)):
-        xor_bits.append((binary_shift[i]+binary_key[i])%2)
+        xor_bits.append((int(binary_shift[i])+ binary_key[i])%2)
     return xor_bits
 
 def to_blocks(plaintext):
