@@ -72,6 +72,17 @@ def to_blocks(plaintext):
         count = count+1
     return block_list
 
+def print_ciphertext(encoded_blocks):
+    for i in range(0, len(encoded_blocks)):
+        result = str(encoded_blocks[i])
+        punc = ''', '''
+        result = result.replace(punc, "")
+        result = result[1:36]
+        print(result)
+        for j in range(0,5):
+            print (result[(j*7):((j+1)*7)], end = " ")
+
+
 def ecb_mode(plaintext, key,):
     blocks = [] 
     # convert plaintext to blocks of binary
@@ -80,16 +91,8 @@ def ecb_mode(plaintext, key,):
     encoded_blocks = []
     for i in range(0,len(blocks)):
         encoded_blocks.insert(i,encode(blocks[i],key))
-    #encode(plaintext, "a5Z#\t")
-    for i in range(0, len(encoded_blocks)):
-        result = str(encoded_blocks[i])
-        print(result)
-        punc = ''', '''
-        result = result.replace(punc, "")
-        result = result[1:36]
-        print(result)
-        for j in range(0,5):
-            print (result[j:j+1*7], end = " ")
+    # Print ciphertext to user
+    print_ciphertext(encoded_blocks)
             
         
 
