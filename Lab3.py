@@ -14,7 +14,9 @@ def main():
     blocks = to_blocks(plaintext)
     encoded_blocks = []
     cbc_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks )
-    
+    blocks = to_blocks(plaintext)
+    encoded_blocks = []
+    cfb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
 
 def convert_bin(acii):
     decimal_vals = []
@@ -132,12 +134,32 @@ def cbc_mode(IV, blocks, key, encoded_blocks):
     blocks.pop(0)
     # Call recursivly if more blocks remain
     length = len(blocks)
+    # Print results if done
     if length == 0:
         print_ciphertext(encoded_blocks)
     else:
         cbc_mode(ciphertext, blocks, key, encoded_blocks)  
     
-
+def cfb_mode(IV, blocks, key, encoded_blocks):
+    xor_bits = []
+    # encode IV and key
+    xor_bits = encode(IV, key)
+    # xor result with plaintext
+    plain_text = blocks[0]
+    xor_bits = []
+    for i in range(0, len(plain_text)):
+        xor_bits.append((plain_text[i]+ IV[i])%2)
+    # add to result
+    encoded_blocks.insert(0, xor_bits)
+    blocks.pop(0)
+    # encode xor_bits and key
+    # Call recursivly if more blocks remain
+    length = len(blocks)
+    # Print results if done
+    if length == 0:
+        print_ciphertext(encoded_blocks)
+    else:
+        cbc_mode(xor_bits, blocks, key, encoded_blocks) 
 
             
         
