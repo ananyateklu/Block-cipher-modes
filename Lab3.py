@@ -159,7 +159,7 @@ def cfb_mode(IV, blocks, key, encoded_blocks):
     if length == 0:
         print_ciphertext(encoded_blocks)
     else:
-        cbc_mode(xor_bits, blocks, key, encoded_blocks) 
+        cfb_mode(xor_bits, blocks, key, encoded_blocks) 
 
             
         
