@@ -17,6 +17,7 @@ def main():
     blocks = to_blocks(plaintext)
     encoded_blocks = []
     cfb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
+    decode([0,0,1,1,1,0,0,0,1,1,1,0,0,1,0,0,0,0,1,1,1,1,1,0,1,1,1,0,1,0,0,0,1,0,0] , key)
 
 def convert_bin(acii):
     decimal_vals = []
@@ -37,33 +38,41 @@ def convert_bin(acii):
         for j in range(0,len(conversion)):
             binary_text.insert((7*i+j), int(conversion[j]))
     return binary_text
-#test
-def decode(cipherblock,key):
-    # convert key to binary
-    binary_key = convert_bin(key)
-    # shift the cipher block three to the left(reverse diffusion)
-    binary_reverse_shift = []
-    print(cipherblock)
-    for i in range(0,len(cipherblock)):
-        binary_reverse_shift.insert((i-3)%35, cipherblock[i])
-    print(binary_reverse_shift,"reversed")
-    print(binary_key,"key")
-    # add key mod 2
-    xor_bits = []
-    for i in range(0, len(binary_key)):
-        xor_bits.insert(i,(binary_reverse_shift[i] + binary_key[i])%2)
-    print(xor_bits,"xor")
+
+# splits binary to groups of 7
+def SplitBinary(binaryList):
     binary_combined = ""
-    for i in xor_bits:
+    for i in binaryList:
         binary_combined += str(i)
     split_binary = " ".join(binary_combined[i:i+7] for i in range(0, len(binary_combined), 7))  
-    print(split_binary,"binary")
+    return split_binary
+
+# takes in a grouped of 7 binary to text
+def binary_to_text(groupedbinary):
     ascii_string = ""
-    for i in split_binary.split():
+    for i in groupedbinary.split():
         an_integer = int(i,2)
         ascii_character = chr(an_integer)
         ascii_string += ascii_character
-    print(ascii_string)
+    return ascii_string
+
+def decode(cipherblock,key):
+    # convert key to binary
+    binary_key = convert_bin(key)
+     # add key mod 2
+    xor_bits = []
+    for i in range(0, len(binary_key)):
+        xor_bits.insert(i,(cipherblock[i] + binary_key[i])%2)
+    # shift the cipher block three to the left (reverse diffusion)
+    binary_reverse_shift = []
+    for i in range(0,len(cipherblock)):
+        binary_reverse_shift.insert((i-3)%35, xor_bits[i]) 
+    # change the binary list into a group of 7 bits 
+    split_binary = SplitBinary(binary_reverse_shift)
+   
+    ascii_string = binary_to_text(split_binary)    
+    
+    print(ascii_string,"is the decoded from cipherblock ")
     
 def encode(plaintext, key):
     # convert key to binary
