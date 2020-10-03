@@ -4,15 +4,19 @@ import math as m
 def main():
     # get key and plaintext from user
     plaintext = input("Enter plaintext ")
-    key = "a5Z#\t"
-    print(key)
-    blocks = [] 
-    # convert plain to blocks of binary
-    blocks = to_blocks(plaintext)
-    # encode blocks
-    #encode(plaintext, "a5Z#\t")
-    ecb_mode(plaintext, key,)
     
+    key = "a5Z#\t"
+    blocks = [] 
+    ecb_mode(plaintext, key)
+    # cbc mode tests
+    blocks = [] 
+    # convert plaintext to blocks of binary
+    blocks = to_blocks(plaintext)
+    encoded_blocks = []
+    cbc_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks )
+    blocks = to_blocks(plaintext)
+    encoded_blocks = []
+    cfb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
 
 def convert_bin(acii):
     decimal_vals = []
@@ -41,7 +45,7 @@ def decode(cipherblock,key):
     binary_reverse_shift = []
     print(cipherblock)
     for i in range(0,len(cipherblock)):
-        binary_reverse_shift.insert((i-3)%35,cipherblock[i])
+        binary_reverse_shift.insert((i-3)%35, cipherblock[i])
     print(binary_reverse_shift,"reversed")
     print(binary_key,"key")
     # add key mod 2
@@ -84,7 +88,6 @@ def to_blocks(plaintext):
     # Check to see if text is already 35 bits
     if (len(binary_text) == block_size):
         block_list.insert(0, binary_text)
-        print("rightSize")
         return block_list
     # if not, divide into 35 bit blocks
     block_count = m.ceil(len(binary_text)/35)
@@ -106,9 +109,9 @@ def print_ciphertext(encoded_blocks):
         punc = ''', '''
         result = result.replace(punc, "")
         result = result[1:36]
-        print(result)
         for j in range(0,5):
             print (result[(j*7):((j+1)*7)], end = " ")
+        print("")
 
 def ecb_mode(plaintext, key,):
     blocks = [] 
@@ -120,6 +123,47 @@ def ecb_mode(plaintext, key,):
         encoded_blocks.insert(i,encode(blocks[i],key))
     # Print ciphertext to user
     print_ciphertext(encoded_blocks)
+
+def cbc_mode(IV, blocks, key, encoded_blocks):
+    cipher_text = []
+    # xor plaintext and IV
+    xor_bits = [] 
+    plain_text = blocks[0]
+    for i in range(0,len(plain_text)):
+        xor_bits.append((plain_text[i]+ IV[i])%2)
+    # encode xor_bits and key
+    ciphertext = encode(xor_bits,key)
+    encoded_blocks.insert(0,ciphertext)
+    blocks.pop(0)
+    # Call recursivly if more blocks remain
+    length = len(blocks)
+    # Print results if done
+    if length == 0:
+        print_ciphertext(encoded_blocks)
+    else:
+        cbc_mode(ciphertext, blocks, key, encoded_blocks)  
+    
+def cfb_mode(IV, blocks, key, encoded_blocks):
+    xor_bits = []
+    # encode IV and key
+    xor_bits = encode(IV, key)
+    # xor result with plaintext
+    plain_text = blocks[0]
+    xor_bits = []
+    for i in range(0, len(plain_text)):
+        xor_bits.append((plain_text[i]+ IV[i])%2)
+    # add to result
+    encoded_blocks.insert(0, xor_bits)
+    blocks.pop(0)
+    # encode xor_bits and key
+    # Call recursivly if more blocks remain
+    length = len(blocks)
+    # Print results if done
+    if length == 0:
+        print_ciphertext(encoded_blocks)
+    else:
+        cfb_mode(xor_bits, blocks, key, encoded_blocks) 
+
             
         
 
