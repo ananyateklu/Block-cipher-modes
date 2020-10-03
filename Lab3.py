@@ -6,18 +6,18 @@ def main():
     plaintext = input("Enter plaintext ")
     
     key = "a5Z#\t"
-    blocks = [] 
     ecb_mode(plaintext, key)
     # cbc mode tests
     blocks = [] 
     # convert plaintext to blocks of binary
     blocks = to_blocks(plaintext)
     encoded_blocks = []
-    cbc_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks )
+    cbc_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
     blocks = to_blocks(plaintext)
     encoded_blocks = []
     cfb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
-    decode([0,0,1,1,1,0,0,0,1,1,1,0,0,1,0,0,0,0,1,1,1,1,1,0,1,1,1,0,1,0,0,0,1,0,0] , key)
+    blocks = to_blocks(plaintext)
+    ofb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
 
 def convert_bin(acii):
     decimal_vals = []
@@ -174,8 +174,23 @@ def cfb_mode(IV, blocks, key, encoded_blocks):
     else:
         cfb_mode(xor_bits, blocks, key, encoded_blocks) 
 
-
-
+def ofb_mode(IV, blocks, key, encoded_blocks):
+    xor_bits = []
+    # encode IV and key
+    xor_IV_key = encode(IV,key)
+    # xor reult with plaintext
+    plain_text = blocks[0]
+    for i in range(0, len(plain_text)):
+        xor_bits.append((plain_text[i]+ IV[i])%2)
+    # add to result
+    encoded_blocks.insert(0, xor_bits)
+    blocks.pop(0)
+    # encode xor_bits and key
+    # Call resursively if more blocks remain
+    if len(blocks) == 0:
+        print_ciphertext(encoded_blocks)
+    else:
+        ofb_mode(xor_IV_key,blocks, key, encoded_blocks)
 
 
 
