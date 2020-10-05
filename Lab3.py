@@ -136,7 +136,7 @@ def ecb_mode(plaintext, key,):
     print_ciphertext(encoded_blocks)
 
 def cbc_mode(IV, blocks, key, encoded_blocks):
-    cipher_text = []
+    # cipher_text = []
     # xor plaintext and IV
     xor_bits = [] 
     plain_text = blocks[0]
