@@ -177,19 +177,19 @@ def cfb_mode(IV, blocks, key, encoded_blocks):
 def ofb_mode(IV, blocks, key, encoded_blocks):
     xor_bits = []
     # encode IV and key
-    xor_IV_key = encode(IV,key)
     # xor reult with plaintext
+    xor_IV_key = encode(IV,key)
     plain_text = blocks[0]
     for i in range(0, len(plain_text)):
         xor_bits.append((plain_text[i]+ IV[i])%2)
     # add to result
-    encoded_blocks.insert(0, xor_bits)
     blocks.pop(0)
     # encode xor_bits and key
-    # Call resursively if more blocks remain
-    if len(blocks) == 0:
-        print_ciphertext(encoded_blocks)
+    encoded_blocks.insert(0, xor_bits)
     else:
+    if len(blocks) == 0:
+    # Call resursively if more blocks remain
+        print_ciphertext(encoded_blocks)
         ofb_mode(xor_IV_key,blocks, key, encoded_blocks)
 
 
