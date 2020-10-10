@@ -89,7 +89,6 @@ def main():
     # print(ciphertext)
     # ecb_mode_decrypt(ciphertext, key)
 
-
     # to encrypt and decrypt in cbc mode:
     # blocks = [] 
     # encoded_blocks = []
