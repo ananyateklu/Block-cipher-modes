@@ -3,9 +3,31 @@ import math as m
 
 def main():
     # get key and plaintext from user
-    plaintext = input("Enter plaintext ")
-    
-    key = "a5Z#\t"
+    task = input("What would you like to do? type 1 for encrypt, 2 for decrypt")
+    if task == '1':
+        task2 = input("What mode would you like to encrypt in? choose from(ecb,cbc,ofb,ctr,cfb)")
+        plaintext = input("Enter plaintext (of ascii characters)")
+        key = input("enter a key (string of bits represented by ints with no spaces)")
+        key = list(key)
+        key = [int(i) for i in key] 
+        if task2 == 'ecb':
+            ecb_mode(plaintext, key,)
+           
+
+    # ciphertext = input("Enter plaintext ")
+    # ciphertext = bin_to_blocks(ciphertext)
+   
+    # ciphertext = list(ciphertext)
+    # ciphertext = [int(i) for i in ciphertext] 
+    # # print(ciphertext, "current")
+    # key = "a5Z#\t"
+    # key = convert_bin(key)
+    # print(key)
+    # decoded_blocks = []
+    # ciphertext = ecb_mode(ciphertext, key)
+    # print(ciphertext, "desired")
+    # cbc_mode_decryption([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], ciphertext, key, decoded_blocks)
+
     # to encrypt and decrypt in ecb mode: 
     # ciphertext = ecb_mode(plaintext, key)
     # print(ciphertext)
@@ -13,27 +35,31 @@ def main():
 
 
     # to encrypt and decrypt in cbc mode:
-    blocks = [] 
-    encoded_blocks = []
-    blocks = to_blocks(plaintext)
-    cbc_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
-    ciphertext = encoded_blocks
-    decoded_blocks = []
-    cbc_mode_decryption([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], ciphertext, key, decoded_blocks)
-    blocks = to_blocks(plaintext)
-    encoded_blocks = []
-    cfb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
-    blocks = to_blocks(plaintext)
-    encoded_blocks = []
-    ofb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
-    ciphertext = encoded_blocks
-    decoded_blocks = []
-    ofb_mode_decryption([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], ciphertext, key, decoded_blocks)
-    blocks = to_blocks(plaintext)
-    encoded_blocks = []
-    IV=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-    ctr_mode(IV,blocks,key,encoded_blocks,0)
+    # blocks = [] 
+    # encoded_blocks = []
+    # blocks = to_blocks(plaintext)
+
+    # cbc_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
+    # ciphertext = encoded_blocks
+    # decoded_blocks = []
+    # cbc_mode_decryption([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], ciphertext, key, decoded_blocks)
+    # blocks = to_blocks(plaintext)
+    # encoded_blocks = []
+    # cfb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
+    # blocks = to_blocks(plaintext)
+    # encoded_blocks = []
+    # ofb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
+    # ciphertext = encoded_blocks
+    # decoded_blocks = []
+    # ofb_mode_decryption([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], ciphertext, key, decoded_blocks)
+    # blocks = to_blocks(plaintext)
+    # encoded_blocks = []
+    # IV=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+    # ctr_mode(IV,blocks,key,encoded_blocks,0)
     # ctr_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,],blocks,key,encoded_blocks,[0,0,0,0,0,0,0,0,0,0])
+
+
+
 def printResult(plain_text):
     result = '' 
     for i in range(0, len(plain_text)):
@@ -86,15 +112,15 @@ def binary_to_text(groupedbinary):
     
 def encode(plaintext, key):
     # convert key to binary
-    binary_key = convert_bin(key)
+    # binary_key = convert_bin(key)
     # shift the plaintext three to the right
     binary_shift = [] 
     for i in range(0, len(plaintext)):
         binary_shift.insert((i+3)%35,plaintext[i]) 
     # add key mod 2
     xor_bits = []
-    for i in range(0, len(binary_key)):
-        xor_bits.append((int(binary_shift[i])+binary_key[i])%2)
+    for i in range(0, len(key)):
+        xor_bits.append((int(binary_shift[i])+key[i])%2)
     return xor_bits
 
 
