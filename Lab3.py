@@ -70,7 +70,6 @@ def encode(plaintext, key):
     for i in range(0, len(plaintext)):
         binary_shift.insert((i+3)%35,plaintext[i]) 
     # add key mod 2
-    print(binary_shift,"binary")
     xor_bits = []
     for i in range(0, len(binary_key)):
         xor_bits.append((int(binary_shift[i])+binary_key[i])%2)
@@ -199,64 +198,40 @@ def ofb_mode(IV, blocks, key, encoded_blocks):
         
     
 
-# def ctr_mode(IV,blocks,key, encoded_blocks,count):
-#     # convert IV to string for use later
-#     result = str(IV)
-#     punc = ''', '''
-#     result = result.replace(punc, "")
-        
-#     # iv is 19 bits
-#     # counter is 16 bits
-#     print(len(blocks))
-#     while(len(blocks) >0): 
-#         # generate iv/counter combo for round
-#         bin_count = bin(count).replace('0b','') 
-#         # make sure counter is 16 bits
-#         if(len(bin_count)<16):
-#             padlen = 16 - len(bin_count)
-#             pad_str = 0*padlen
-#         else: 
-#             pad_str = bin_count   
-#         # combine 16 bit counter and 19 bit IV
-#         combo_key = IV.join(pad_str)
-      
-
-#         count = count +1
-#         blocks.pop(0)
+def ctr_mode(IV,blocks,key, encoded_blocks,count):
+    # convert IV to string for use later
+    tempIV = str(IV)
+    punc = ''', '''
+    tempIV = tempIV.replace(punc, "")[1:20]
+    # iv is 19 bits
+    # counter is 16 bits
+    # generate iv/counter combo for round
+    bin_count = bin(count).replace('0b','') 
+    # make sure counter is 16 bits
+    if(len(bin_count)<16):
+        padlen = (16 - len(bin_count))
+        pad_str = '0'*padlen
+        pad_str = str(pad_str) + bin_count
+    else: 
+        pad_str = str(bin_count)   
+        # combine 16 bit counter and 19 bit IV
+    combo_key = tempIV + pad_str
+        # encode key and combo_key in block cipher
+    encoded_block = encode(combo_key, key)
+        # xor with plaintext
+    xor_bits = []
+    plain_text = blocks[0]
+    for i in range(0, len(plain_text)):
+        xor_bits.append((encoded_block[i]+ plain_text[i]) %2)
+    encoded_blocks.insert(0, xor_bits)
+    count = count +1
+    blocks.pop(0)
+    if len(blocks) == 0:
+        print_ciphertext(encoded_blocks)         
+    else:
+        ctr_mode(IV,blocks,key, encoded_blocks,count)
     
-
-
-
-
-
-
-    # xor_bits = []
-    # # encode IV and key
-    # xor_IV_key = encode(counterAndIV,key)
-    # # xor reult with plaintext
-    # plain_text = blocks[0]
-    # for i in range(0, len(plain_text)):
-    #     xor_bits.append((plain_text[i]+ counterAndIV[i])%2)
-    # # add to result
-    # encoded_blocks.insert(0, xor_bits)
-    # blocks.pop(0)
-    # # encode xor_bits and key
-    # # Call resursively if more blocks remain
-    # if len(blocks) == 0:
-    #     print_ciphertext(encoded_blocks)
-    # else:
-    #     ctr_mode(xor_IV_key,blocks, key, encoded_blocks, counter)
-
-    # # for i in range(20):
-    # #     countBinary = format(i,'b')
-    # #     # print(len(str(countBinary)))
-    # #     print(counter[:len(str(countBinary))])
     
-        
-
-
-
 
 
 main()
-#def decrypt(ciphertext, key):
