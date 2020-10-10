@@ -162,13 +162,14 @@ def to_blocks(plaintext):
         count = count+1
     return block_list
 
-def print_ciphertext(encoded_blocks):
+def print_ciphertext(encoded_blocks, modes):
     result_str = ""
     for i in range(0, len(encoded_blocks)):
         result = str(encoded_blocks[i])
         punc = ''', '''
         result = result.replace(punc, "")
         result = result[1:36]
+        print('{}'.format(modes))
         for j in range(0,5):
             print (result[(j*7):((j+1)*7)], end = " ")
             result_str += result[(j*7):((j+1)*7)] + " "
@@ -184,7 +185,7 @@ def ecb_mode(plaintext, key,):
     for i in range(0,len(blocks)):
         encoded_blocks.insert(i,encode(blocks[i],key))
     # Print ciphertext to user
-    print_ciphertext(encoded_blocks)
+    print_ciphertext(encoded_blocks, ' ecb_mode')
     return encoded_blocks
 
 def ecb_mode_decrypt(ciphertext,key):
@@ -218,7 +219,7 @@ def cbc_mode(IV, blocks, key, encoded_blocks):
     length = len(blocks)
     # Print results if done
     if length == 0:
-        print_ciphertext(encoded_blocks)
+        print_ciphertext(encoded_blocks, 'cbc_mode')
         return encoded_blocks
     else:
         cbc_mode(ciphertext, blocks, key, encoded_blocks)  
@@ -235,21 +236,9 @@ def cbc_mode_decryption(IV, blocks, key, encoded_blocks):
         # add xor_bits to result as plain text
         encoded_blocks.append(xor_bits)
         IV = ciphertext
-    groups = print_ciphertext(encoded_blocks)
+    groups = print_ciphertext(encoded_blocks, ' cbc_mode_decryption')
     text = binary_to_text(groups)
     print(text)
-    
-        
-    
-    
- 
-
-
-
-
-
-
-
 def cfb_mode(IV, blocks, key, encoded_blocks):
     xor_bits = []
     # encode IV and key
@@ -267,7 +256,7 @@ def cfb_mode(IV, blocks, key, encoded_blocks):
     length = len(blocks)
     # Print results if done
     if length == 0:
-        print_ciphertext(encoded_blocks)
+        print_ciphertext(encoded_blocks, ' cfb_mode')
     else:
         cfb_mode(xor_bits, blocks, key, encoded_blocks) 
 
@@ -284,7 +273,7 @@ def ofb_mode(IV, blocks, key, encoded_blocks):
     blocks.pop(0)
     # encode xor_bits and key
     if len(blocks) == 0:
-        print_ciphertext(encoded_blocks)        
+        print_ciphertext(encoded_blocks, ' ofb_mode')        
     else:
         ofb_mode(xor_IV_key,blocks, key, encoded_blocks)
     # Call resursively if more blocks remain
@@ -320,7 +309,7 @@ def ctr_mode(IV,blocks,key, encoded_blocks,count):
     count = count +1
     blocks.pop(0)
     if len(blocks) == 0:
-        print_ciphertext(encoded_blocks)         
+        print_ciphertext(encoded_blocks, ' ctr_mode')         
     else:
         ctr_mode(IV,blocks,key, encoded_blocks,count)
     
