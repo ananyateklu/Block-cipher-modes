@@ -26,6 +26,9 @@ def main():
     blocks = to_blocks(plaintext)
     encoded_blocks = []
     ofb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
+    ciphertext = encoded_blocks
+    decoded_blocks = []
+    ofb_mode_decryption([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], ciphertext, key, decoded_blocks)
     blocks = to_blocks(plaintext)
     encoded_blocks = []
     IV=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
@@ -275,8 +278,26 @@ def ofb_mode(IV, blocks, key, encoded_blocks):
         ofb_mode(xor_IV_key,blocks, key, encoded_blocks)   
     # Call resursively if more blocks remain
         
+def ofb_mode_decryption(IV,blocks, key, decoded_blocks):
+    xor_bits = []
+    # encode IV and key
+    xor_IV_key = encode(IV,key)
+    # xor reult with plaintext
+    cipher_text = blocks[0]
+    for i in range(0, len(cipher_text)):
+        xor_bits.append((cipher_text[i]+ xor_IV_key[i])%2)
+    # add to result
+    decoded_blocks.insert(0, xor_bits)
+    blocks.pop(0)
+    # encode xor_bits and key
+    # Call resursively if more blocks remain
+    if len(blocks) == 0:
+        print(binary_to_text(print_ciphertext(decoded_blocks, 'ofb_mode_decyption')))
+    else:
+        ofb_mode_decryption(xor_IV_key,blocks, key, decoded_blocks)    
 
-        
+
+
 def ctr_mode(IV,blocks,key, encoded_blocks,count):
     # convert IV to string for use later
     tempIV = str(IV)
