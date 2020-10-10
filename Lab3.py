@@ -190,13 +190,13 @@ def to_blocks(plaintext):
     return block_list
 
 def print_ciphertext(encoded_blocks, modes):
+    print('{}'.format(modes))
     result_str = ""
     for i in range(0, len(encoded_blocks)):
         result = str(encoded_blocks[i])
         punc = ''', '''
         result = result.replace(punc, "")
         result = result[1:36]
-        print('{}'.format(modes))
         for j in range(0,5):
             print (result[(j*7):((j+1)*7)], end = " ")
             result_str += result[(j*7):((j+1)*7)] + " "
