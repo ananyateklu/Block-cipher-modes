@@ -19,9 +19,13 @@ def main():
     blocks = to_blocks(plaintext)
     encoded_blocks = []
     ofb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
+    ciphertext = [0,1,0,0,0,1,1,1,1,1,1,0,1,0,1,1,0,1,0,1,1,1,1,0,0,1,0,1,0,1,1,0,0,1,1]
+    decoded_blocks = []
+    # ofb_mode_decrypt([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],ciphertext,key,decoded_blocks)
     # blocks = to_blocks(plaintext)
     # encoded_blocks = []
     # ctr_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,],blocks,key,encoded_blocks,[0,0,0,0,0,0,0,0,0,0])
+    decode([0,0,1,1,1,0,0,0,1,1,1,0,0,1,0,0,0,0,1,1,1,1,10,1,1,1,0,1,0,0,0,1,0,0],key)
 def convert_bin(acii):
     decimal_vals = []
     # Type cast plaintext to acii chars
@@ -72,6 +76,7 @@ def encode(plaintext, key):
     xor_bits = []
     for i in range(0, len(binary_key)):
         xor_bits.append((int(binary_shift[i])+binary_key[i])%2)
+    print(xor_bits,'xor_bits')
     return xor_bits
 
 
@@ -80,18 +85,22 @@ def decode(cipherblock,key):
     binary_key = convert_bin(key)
      # add key mod 2
     xor_bits = []
-    for i in range(0, len(binary_key)):
-        xor_bits.insert(i,(cipherblock[i] + binary_key[i])%2)
+    for i in range(0, len(cipherblock)):
+        xor_bits.append((cipherblock[i] + binary_key[i])%2)
     # shift the cipher block three to the left (reverse diffusion)
     binary_reverse_shift = []
+
     for i in range(0,len(cipherblock)):
         binary_reverse_shift.insert((i-3)%35, xor_bits[i]) 
     # change the binary list into a group of 7 bits 
     split_binary = SplitBinary(binary_reverse_shift)
    
     ascii_string = binary_to_text(split_binary)    
-    
     print(ascii_string,"is the decoded from cipherblock ")
+    # print(binary_reverse_shift,"testing")
+    # return binary_reverse_shift
+    
+    
 
 def to_blocks(plaintext):
     block_size = 35
@@ -184,7 +193,7 @@ def ofb_mode(IV, blocks, key, encoded_blocks):
     # xor reult with plaintext
     plain_text = blocks[0]
     for i in range(0, len(plain_text)):
-        xor_bits.append((plain_text[i]+ IV[i])%2)
+        xor_bits.append((plain_text[i]+ xor_IV_key[i])%2)
     # add to result
     encoded_blocks.insert(0, xor_bits)
     blocks.pop(0)
@@ -194,6 +203,24 @@ def ofb_mode(IV, blocks, key, encoded_blocks):
         print_ciphertext(encoded_blocks)
     else:
         ofb_mode(xor_IV_key,blocks, key, encoded_blocks)
+
+def ofb_mode_decrypt(IV,blocks, key, decoded_blocks):
+    xor_bits = []
+    # encode IV and key
+    xor_IV_key = decode(IV,key)
+    # xor reult with plaintext
+    cipher_text = blocks
+    for i in range(0, len(cipher_text)):
+        xor_bits.append((cipher_text[i]+ xor_IV_key[i])%2)
+    # add to result
+    decoded_blocks.insert(0, xor_bits)
+    blocks.pop(0)
+    # encode xor_bits and key
+    # Call resursively if more blocks remain
+    if len(blocks) == 0:
+        print_ciphertext(decoded_blocks)
+    else:
+        ofb_mode_decrypt(xor_IV_key,blocks, key, decoded_blocks)
 
 # def ctr_mode(IV,blocks,key, encoded_blocks,counter):
 #     counter = [0,0,0,0,0,0,0,0,0,0]
