@@ -104,7 +104,7 @@ def decode(cipherblock,key,plain_text):
      # add key mod 2
     xor_bits = []
     
-    for i in range(0, len(binary_key)):
+    for i in range(0, len(cipherblock)):
         xor_bits.insert(i,(cipherblock[i] + binary_key[i])%2)
     # shift the cipher block three to the left (reverse diffusion)
     binary_reverse_shift = []
@@ -269,7 +269,7 @@ def ofb_mode(IV, blocks, key, encoded_blocks):
     for i in range(0, len(plain_text)):
         xor_bits.append((plain_text[i]+ xor_IV_key[i])%2)
     # add to result
-    encoded_blocks.insert(0, xor_bits)
+    encoded_blocks.append(xor_bits)
     blocks.pop(0)
     # encode xor_bits and key
     if len(blocks) == 0:
@@ -287,7 +287,7 @@ def ofb_mode_decryption(IV,blocks, key, decoded_blocks):
     for i in range(0, len(cipher_text)):
         xor_bits.append((cipher_text[i]+ xor_IV_key[i])%2)
     # add to result
-    decoded_blocks.insert(0, xor_bits)
+    decoded_blocks.append(xor_bits)
     blocks.pop(0)
     # encode xor_bits and key
     # Call resursively if more blocks remain
