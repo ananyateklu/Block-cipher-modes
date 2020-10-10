@@ -6,17 +6,18 @@ def main():
     plaintext = input("Enter plaintext ")
     
     key = "a5Z#\t"
-    # ecb_mode(plaintext, key)
+    ciphertext = ecb_mode(plaintext, key)
+    ecb_mode_decrypt(ciphertext, key)
     # cbc mode tests
     blocks = [] 
     # convert plaintext to blocks of binary
-    plain_text = []
-    blocks = to_blocks(plaintext)
-    for i in range(0,len(blocks)):
-        encoded = (encode(blocks[i], key,))
-        decode(encoded,key,plain_text)
-    printResult(plain_text)
-    # result = ''
+    # plain_text = []
+    # blocks = to_blocks(plaintext)
+    # for i in range(0,len(blocks)):
+    #     encoded = (encode(blocks[i], key,))
+    #     decode(encoded,key,plain_text)
+    # printResult(plain_text)
+    # # result = ''
     # for i in range(0, len(plain_text)):
     #     if '\x00' in plain_text[i]:
     #         plain_text[i].replace('\x00', '')
@@ -119,6 +120,26 @@ def decode(cipherblock,key,plain_text):
     plain_text.append(ascii_string)
     
     
+def bin_to_blocks(binary_text):
+    block_size = 35
+    block_list = []
+    # Check to see if text is already 35 bits
+    if (len(binary_text) == block_size):
+        block_list.insert(0, binary_text)
+        return block_list
+    # if not, divide into 35 bit blocks
+    block_count = m.ceil(len(binary_text)/35)
+    count = 0
+    while(count < block_count):
+        block = []
+        for i in range(0,35):
+            if (len(binary_text) > (35*count)+i):
+                block.insert(i,int(binary_text[(35*count)+i])) 
+            else:
+                block.append(0)
+        block_list.insert(count, block)
+        count = count+1
+    return block_list
 
 def to_blocks(plaintext):
     block_size = 35
@@ -163,6 +184,23 @@ def ecb_mode(plaintext, key,):
         encoded_blocks.insert(i,encode(blocks[i],key))
     # Print ciphertext to user
     print_ciphertext(encoded_blocks)
+    return encoded_blocks
+
+def ecb_mode_decrypt(ciphertext,key):
+    ciphertext = str(ciphertext)
+    punc = ''', '''
+    ciphertext = ciphertext.replace(punc, "")
+    ciphertext = ciphertext.replace("[", '')
+    ciphertext = ciphertext.replace("]", '')
+    blocks = []
+    blocks = bin_to_blocks(ciphertext)
+    plain = []
+    for i in range(0, len(blocks)):
+        decode(blocks[i],key,plain)
+        # plain.insert(i,decode(blocks[i],key,plain))
+        # print(decode(blocks[i],key,plain))
+    printResult(plain)
+    return plain
 
 def cbc_mode(IV, blocks, key, encoded_blocks):
     # cipher_text = []
