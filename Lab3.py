@@ -51,7 +51,7 @@ def main():
             encoded_blocks = []
             cfb_mode(IV, blocks, key, encoded_blocks)
     if task == '2':
-        task2 = input("What mode would you like to decrypt in? choose from(cbc,ctr)")
+        task2 = input("What mode would you like to decrypt in? choose from(cbc,ofb)")
         ciphertext = input("Enter ciphertext (string of bits)")
         ciphertext = bin_to_blocks(ciphertext)
         key = input("enter a key (string of bits represented by ints with no spaces)")
