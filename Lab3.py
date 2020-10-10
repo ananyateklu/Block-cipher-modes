@@ -6,27 +6,24 @@ def main():
     plaintext = input("Enter plaintext ")
     
     key = "a5Z#\t"
-    ciphertext = ecb_mode(plaintext, key)
-    ecb_mode_decrypt(ciphertext, key)
-    # cbc mode tests
+    # to encrypt and decrypt in ecb mode: 
+    # ciphertext = ecb_mode(plaintext, key)
+    # print(ciphertext)
+    # ecb_mode_decrypt(ciphertext, key)
+
+
+    # to encrypt and decrypt in cbc mode:
     blocks = [] 
-    # convert plaintext to blocks of binary
-    # plain_text = []
+    encoded_blocks = []
+    blocks = to_blocks(plaintext)
+    cbc_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
+    ciphertext = encoded_blocks
+    cbc_mode_decryption([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], ciphertext, key, encoded_blocks)
+    
+    
+    
     # blocks = to_blocks(plaintext)
-    # for i in range(0,len(blocks)):
-    #     encoded = (encode(blocks[i], key,))
-    #     decode(encoded,key,plain_text)
-    # printResult(plain_text)
-    # # result = ''
-    # for i in range(0, len(plain_text)):
-    #     if '\x00' in plain_text[i]:
-    #         plain_text[i].replace('\x00', '')
-    #     result += plain_text[i]
-    # print (result)
-    # encoded_blocks = []
-    # cbc_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
-    # blocks = to_blocks(plaintext)
-    # encoded_blocks = []
+    
     # cfb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
     # blocks = to_blocks(plaintext)
     # encoded_blocks = []
@@ -37,7 +34,7 @@ def main():
     # ctr_mode(IV,blocks,key,encoded_blocks,0)
     # ctr_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,],blocks,key,encoded_blocks,[0,0,0,0,0,0,0,0,0,0])
 def printResult(plain_text):
-    result = ''
+    result = '' 
     for i in range(0, len(plain_text)):
         if '\x00' in plain_text[i]:
             plain_text[i].replace('\x00', '')
@@ -118,6 +115,7 @@ def decode(cipherblock,key,plain_text):
     ascii_string = binary_to_text(split_binary)    
 
     plain_text.append(ascii_string)
+    return binary_reverse_shift
     
     
 def bin_to_blocks(binary_text):
@@ -165,6 +163,7 @@ def to_blocks(plaintext):
     return block_list
 
 def print_ciphertext(encoded_blocks):
+    result_str = ""
     for i in range(0, len(encoded_blocks)):
         result = str(encoded_blocks[i])
         punc = ''', '''
@@ -172,7 +171,9 @@ def print_ciphertext(encoded_blocks):
         result = result[1:36]
         for j in range(0,5):
             print (result[(j*7):((j+1)*7)], end = " ")
+            result_str += result[(j*7):((j+1)*7)] + " "
         print("")
+    return result_str
 
 def ecb_mode(plaintext, key,):
     blocks = [] 
@@ -194,11 +195,11 @@ def ecb_mode_decrypt(ciphertext,key):
     ciphertext = ciphertext.replace("]", '')
     blocks = []
     blocks = bin_to_blocks(ciphertext)
+    
     plain = []
     for i in range(0, len(blocks)):
         decode(blocks[i],key,plain)
-        # plain.insert(i,decode(blocks[i],key,plain))
-        # print(decode(blocks[i],key,plain))
+        
     printResult(plain)
     return plain
 
@@ -211,16 +212,44 @@ def cbc_mode(IV, blocks, key, encoded_blocks):
         xor_bits.append((plain_text[i]+ IV[i])%2)
     # encode xor_bits and key
     ciphertext = encode(xor_bits,key)
-    encoded_blocks.insert(0,ciphertext)
+    encoded_blocks.append(ciphertext)  # THIS MAY BE YOUR PROBLEM
     blocks.pop(0)
     # Call recursivly if more blocks remain
     length = len(blocks)
     # Print results if done
     if length == 0:
         print_ciphertext(encoded_blocks)
+        return encoded_blocks
     else:
         cbc_mode(ciphertext, blocks, key, encoded_blocks)  
+
+def cbc_mode_decryption(IV, blocks, key, encoded_blocks):   
+   # xor result wtih the IV
+    for i in range(0, len(blocks)):
+        ciphertext = blocks[i]
+        filler =[] # just need to fill in arguement of decode 
+        decoded_bits = decode(ciphertext, key, filler)
+        xor_bits = [] 
+        for j in range(0,len(IV)):
+            xor_bits.append((decoded_bits[j]+IV[j])%2)
+        # add xor_bits to result as plain text
+        encoded_blocks.append(xor_bits)
+        IV = ciphertext
+    groups = print_ciphertext(encoded_blocks)
+    text = binary_to_text(groups)
+    print(text)
     
+        
+    
+    
+ 
+
+
+
+
+
+
+
 def cfb_mode(IV, blocks, key, encoded_blocks):
     xor_bits = []
     # encode IV and key
