@@ -2,6 +2,33 @@
 import math as m
 
 def main():
+    # decrypting melissa's cipher
+    ciphertext = input("enter ciphertext")
+    ciphertext = bin_to_blocks(ciphertext)
+    key = "a8*2)"
+    key = convert_bin(key)
+    IV = "10101110100001011110101001110110101"
+    IV = list(IV)
+    IV = [int(i) for i in IV]
+    decoded_blocks =[]
+    cbc_mode_decryption(IV, ciphertext, key, decoded_blocks)
+
+    ciphertext = input("enter ciphertext")
+    ciphertext = bin_to_blocks(ciphertext)
+    decoded_blocks=[]
+    IV = "10101110100001011110101001110110101"
+    IV = list(IV)
+    IV = [int(i) for i in IV]
+    key = "a8*2)"
+    key = convert_bin(key)
+    ofb_mode_decryption(IV,ciphertext, key, decoded_blocks)
+
+    
+
+
+
+
+    
     # get key and plaintext from user
     task = input("What would you like to do? type 1 for encrypt, 2 for decrypt")
     if task == '1':
