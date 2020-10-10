@@ -5,12 +5,11 @@ def main():
     # get key and plaintext from user
     plaintext = input("Enter plaintext ")
     
-    key = "a5Z#\t"
+    key = "foods"
     # to encrypt and decrypt in ecb mode: 
     # ciphertext = ecb_mode(plaintext, key)
     # print(ciphertext)
     # ecb_mode_decrypt(ciphertext, key)
-
 
     # to encrypt and decrypt in cbc mode:
     blocks = [] 
