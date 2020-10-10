@@ -264,7 +264,7 @@ def ofb_mode(IV, blocks, key, encoded_blocks):
     xor_IV_key = encode(IV,key)
     plain_text = blocks[0]
     for i in range(0, len(plain_text)):
-        xor_bits.append((plain_text[i]+ IV[i])%2)
+        xor_bits.append((plain_text[i]+ xor_IV_key[i])%2)
     # add to result
     encoded_blocks.insert(0, xor_bits)
     blocks.pop(0)
@@ -272,11 +272,11 @@ def ofb_mode(IV, blocks, key, encoded_blocks):
     if len(blocks) == 0:
         print_ciphertext(encoded_blocks, 'ofb_mode')        
     else:
-        ofb_mode(xor_IV_key,blocks, key, encoded_blocks)
+        ofb_mode(xor_IV_key,blocks, key, encoded_blocks)   
     # Call resursively if more blocks remain
         
-    
 
+        
 def ctr_mode(IV,blocks,key, encoded_blocks,count):
     # convert IV to string for use later
     tempIV = str(IV)
