@@ -8,10 +8,50 @@ def main():
         task2 = input("What mode would you like to encrypt in? choose from(ecb,cbc,ofb,ctr,cfb)")
         plaintext = input("Enter plaintext (of ascii characters)")
         key = input("enter a key (string of bits represented by ints with no spaces)")
+        while(len(key)!=35):
+                key = input("Try again, key must be 35 bits")
         key = list(key)
         key = [int(i) for i in key] 
         if task2 == 'ecb':
             ecb_mode(plaintext, key,)
+        if task2 == 'cbc':
+            IV = input("enter the IV (string of bits represented by ints with no spaces)")
+            while(len(IV)!=35):
+                IV = input("Try again, IV must be 35 bits")
+            IV = list(IV)
+            IV = [int(i) for i in key]
+            blocks = to_blocks(plaintext)
+            encoded_blocks = []
+            cbc_mode(IV, blocks, key, encoded_blocks)
+        if task2 == 'ofb':
+            IV = input("enter the IV (string of bits represented by ints with no spaces)")
+            while(len(IV)!=35):
+                IV = input("Try again, IV must be 35 bits")
+            IV = list(IV)
+            IV = [int(i) for i in key]
+            blocks = to_blocks(plaintext)
+            encoded_blocks = []
+            ofb_mode(IV, blocks, key, encoded_blocks)
+        if task2 == 'ctr':
+            IV = input("enter the IV (string of bits represented by ints with no spaces)")
+            while(len(IV)!=19):
+                IV = input("Try again, IV must be 19 bits in order to make room for counter")
+            IV = list(IV)
+            IV = [int(i) for i in key]
+            blocks = to_blocks(plaintext)
+            encoded_blocks = []
+            ctr_mode(IV,blocks,key, encoded_blocks,0)
+        if task2 == 'cfb':
+            IV = input("enter the IV (string of bits represented by ints with no spaces)")
+            while(len(IV)!=35):
+                IV = input("Try again, IV must be 35 bits")
+            IV = list(IV)
+            IV = [int(i) for i in key]
+            blocks = to_blocks(plaintext)
+            encoded_blocks = []
+            cfb_mode(IV, blocks, key, encoded_blocks)
+    else: 
+        print("invalid input, please only enter a given option")
            
 
     # ciphertext = input("Enter plaintext ")
