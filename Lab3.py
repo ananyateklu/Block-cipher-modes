@@ -18,20 +18,18 @@ def main():
     blocks = to_blocks(plaintext)
     cbc_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
     ciphertext = encoded_blocks
-    cbc_mode_decryption([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], ciphertext, key, encoded_blocks)
-    
-    
-    
-    # blocks = to_blocks(plaintext)
-    
-    # cfb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
-    # blocks = to_blocks(plaintext)
-    # encoded_blocks = []
-    # ofb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
-    # blocks = to_blocks(plaintext)
-    # encoded_blocks = []
-    # IV=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-    # ctr_mode(IV,blocks,key,encoded_blocks,0)
+    decoded_blocks = []
+    cbc_mode_decryption([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], ciphertext, key, decoded_blocks)
+    blocks = to_blocks(plaintext)
+    encoded_blocks = []
+    cfb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
+    blocks = to_blocks(plaintext)
+    encoded_blocks = []
+    ofb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
+    blocks = to_blocks(plaintext)
+    encoded_blocks = []
+    IV=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+    ctr_mode(IV,blocks,key,encoded_blocks,0)
     # ctr_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,],blocks,key,encoded_blocks,[0,0,0,0,0,0,0,0,0,0])
 def printResult(plain_text):
     result = '' 
@@ -185,7 +183,7 @@ def ecb_mode(plaintext, key,):
     for i in range(0,len(blocks)):
         encoded_blocks.insert(i,encode(blocks[i],key))
     # Print ciphertext to user
-    print_ciphertext(encoded_blocks, ' ecb_mode')
+    print_ciphertext(encoded_blocks, 'ecb_mode')
     return encoded_blocks
 
 def ecb_mode_decrypt(ciphertext,key):
@@ -199,8 +197,7 @@ def ecb_mode_decrypt(ciphertext,key):
     
     plain = []
     for i in range(0, len(blocks)):
-        decode(blocks[i],key,plain)
-        
+        decode(blocks[i],key,plain)    
     printResult(plain)
     return plain
 
@@ -236,7 +233,7 @@ def cbc_mode_decryption(IV, blocks, key, encoded_blocks):
         # add xor_bits to result as plain text
         encoded_blocks.append(xor_bits)
         IV = ciphertext
-    groups = print_ciphertext(encoded_blocks, ' cbc_mode_decryption')
+    groups = print_ciphertext(encoded_blocks, 'cbc_mode_decryption')
     text = binary_to_text(groups)
     print(text)
 def cfb_mode(IV, blocks, key, encoded_blocks):
@@ -256,7 +253,7 @@ def cfb_mode(IV, blocks, key, encoded_blocks):
     length = len(blocks)
     # Print results if done
     if length == 0:
-        print_ciphertext(encoded_blocks, ' cfb_mode')
+        print_ciphertext(encoded_blocks, 'cfb_mode')
     else:
         cfb_mode(xor_bits, blocks, key, encoded_blocks) 
 
@@ -273,7 +270,7 @@ def ofb_mode(IV, blocks, key, encoded_blocks):
     blocks.pop(0)
     # encode xor_bits and key
     if len(blocks) == 0:
-        print_ciphertext(encoded_blocks, ' ofb_mode')        
+        print_ciphertext(encoded_blocks, 'ofb_mode')        
     else:
         ofb_mode(xor_IV_key,blocks, key, encoded_blocks)
     # Call resursively if more blocks remain
@@ -309,7 +306,7 @@ def ctr_mode(IV,blocks,key, encoded_blocks,count):
     count = count +1
     blocks.pop(0)
     if len(blocks) == 0:
-        print_ciphertext(encoded_blocks, ' ctr_mode')         
+        print_ciphertext(encoded_blocks, 'ctr_mode')         
     else:
         ctr_mode(IV,blocks,key, encoded_blocks,count)
     
