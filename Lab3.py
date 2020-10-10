@@ -10,7 +10,18 @@ def main():
     # cbc mode tests
     blocks = [] 
     # convert plaintext to blocks of binary
-    # blocks = to_blocks(plaintext)
+    plain_text = []
+    blocks = to_blocks(plaintext)
+    for i in range(0,len(blocks)):
+        encoded = (encode(blocks[i], key,))
+        decode(encoded,key,plain_text)
+    printResult(plain_text)
+    # result = ''
+    # for i in range(0, len(plain_text)):
+    #     if '\x00' in plain_text[i]:
+    #         plain_text[i].replace('\x00', '')
+    #     result += plain_text[i]
+    # print (result)
     # encoded_blocks = []
     # cbc_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
     # blocks = to_blocks(plaintext)
@@ -19,11 +30,23 @@ def main():
     # blocks = to_blocks(plaintext)
     # encoded_blocks = []
     # ofb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
-    blocks = to_blocks(plaintext)
-    encoded_blocks = []
-    IV=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-    ctr_mode(IV,blocks,key,encoded_blocks,0)
+    # blocks = to_blocks(plaintext)
+    # encoded_blocks = []
+    # IV=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+    # ctr_mode(IV,blocks,key,encoded_blocks,0)
     # ctr_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,],blocks,key,encoded_blocks,[0,0,0,0,0,0,0,0,0,0])
+def printResult(plain_text):
+    result = ''
+    for i in range(0, len(plain_text)):
+        if '\x00' in plain_text[i]:
+            plain_text[i].replace('\x00', '')
+        result += plain_text[i]
+        if i%10 == 0:
+            plain_text[i] = plain_text[i]+"\n"
+    print (result)
+
+
+
 def convert_bin(acii):
     decimal_vals = []
     # Type cast plaintext to acii chars
@@ -76,11 +99,12 @@ def encode(plaintext, key):
     return xor_bits
 
 
-def decode(cipherblock,key):
+def decode(cipherblock,key,plain_text):
     # convert key to binary
     binary_key = convert_bin(key)
      # add key mod 2
     xor_bits = []
+    
     for i in range(0, len(binary_key)):
         xor_bits.insert(i,(cipherblock[i] + binary_key[i])%2)
     # shift the cipher block three to the left (reverse diffusion)
@@ -91,8 +115,10 @@ def decode(cipherblock,key):
     split_binary = SplitBinary(binary_reverse_shift)
    
     ascii_string = binary_to_text(split_binary)    
+
+    plain_text.append(ascii_string)
     
-    print(ascii_string,"is the decoded from cipherblock ")
+    
 
 def to_blocks(plaintext):
     block_size = 35
