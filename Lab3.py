@@ -2,41 +2,35 @@
 import math as m
 
 def main():
-    # decrypting melissa's cipher
-    ciphertext = input("enter ciphertext")
-    ciphertext = bin_to_blocks(ciphertext)
-    key = "11001101101111110111111001001110011"
-    # key = convert_bin(key)
-    IV = "10101110100001011110101001110110101"
-    IV = list(IV)
-    IV = [int(i) for i in IV]
-    key = list(key)
-    key = [int(i) for i in key] 
-    print(key)
-    decoded_blocks =[]
-    cbc_mode_decryption(IV, ciphertext, key, decoded_blocks)
-
-    # decrypting melissa's cipher
-    ciphertext = input("enter ciphertext")
-    ciphertext = bin_to_blocks(ciphertext)
-    decoded_blocks=[]
-    IV = "10101110100001011110101001110110101"
-    IV = list(IV)
-    IV = [int(i) for i in IV]
-    key = "a8*2)"clea
-    key = convert_bin(key)
-    print(key)
-    cbc_mode_decryption(IV, ciphertext, key, decoded_blocks)
+    # decrypting our cipher
+    # ciphertext = input("enter ciphertext")
+    # ciphertext = bin_to_blocks(ciphertext)
+    # key = "11001101101111110111111001001110011"
+    # # key = convert_bin(key)
+    # IV = "10101110100001011110101001110110101"
+    # IV = list(IV)
+    # IV = [int(i) for i in IV]
+    # key = list(key)
+    # key = [int(i) for i in key] 
+    # print(key)
+    # decoded_blocks =[]
     # ofb_mode_decryption(IV,ciphertext, key, decoded_blocks)
+    # cbc_mode_decryption(IV, ciphertext, key, decoded_blocks)
 
-   
-
+    # # decrypting melissa's cipher
+    # ciphertext = input("enter ciphertext")
+    # ciphertext = bin_to_blocks(ciphertext)
+    # decoded_blocks=[]
+    # IV = "10101110100001011110101001110110101"
+    # IV = list(IV)
+    # IV = [int(i) for i in IV]
+    # key = "a8*2)"
+    # key = convert_bin(key)
+    # print(key)
+    # cbc_mode_decryption(IV, ciphertext, key, decoded_blocks)
     
 
 
-
-
-    
     # get key and plaintext from user
     task = input("What would you like to do? type 1 for encrypt, 2 for decrypt")
     if task == '1':
@@ -63,7 +57,7 @@ def main():
             while(len(IV)!=35):
                 IV = input("Try again, IV must be 35 bits")
             IV = list(IV)
-            IV = [int(i) for i in key]
+            IV = [int(i) for i in IV]
             blocks = to_blocks(plaintext)
             encoded_blocks = []
             ofb_mode(IV, blocks, key, encoded_blocks)
