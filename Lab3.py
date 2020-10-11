@@ -33,15 +33,15 @@ def main():
 
     # get key and plaintext from user
     task =''
-    key = input("enter a key (string of bits represented by ints with no spaces)\n key remains the same until user quits")
+    key = input("**enter a key (string of bits represented by ints with no spaces)**\n ***key remains the same until user quits*** ")
     while(len(key)!=35):
-        key = input("Try again, key must be 35 bits")
+        key = input("Try again, key must have length of 35 ")
     key = list(key)
     key = [int(i) for i in key]
     while(task != 'quit'):
         task = input("What would you like to do? type 1 for encrypt, 2 for decrypt, type 'quit' to exit ")
         if task == '1':
-            task2 = input("What mode would you like to encrypt in? choose from(ecb,cbc,ofb,ctr,cfb)")
+            task2 = input("What mode would you like to encrypt in? choose from(cbc,ofb,ctr,ecb,cfb) ")
             plaintext = input("Enter plaintext (of ascii characters)")
             if task2 == 'ecb':
                 ecb_mode(plaintext, key,)
@@ -69,14 +69,9 @@ def main():
             else:
                 print("try again input invalid")
         elif task == '2':
-            task2 = input("What mode would you like to decrypt in? choose from(cbc,ofb,ctr,ecb,cfb)")
+            task2 = input("What mode would you like to decrypt in? choose from(cbc,ofb,ctr,ecb,cfb) ")
             ciphertext = input("Enter ciphertext (string of bits)")
             ciphertext = bin_to_blocks(ciphertext)
-            # key = input("enter a key (string of bits represented by ints with no spaces)")
-            # while(len(key)!= 35):
-            #     key = input("try again, key must have length of 35")
-            # key = list(key)
-            # key = [int(i) for i in key] 
             if task2 == 'cbc':
                 IV = get_IV(35)
                 decoded_blocks= []
@@ -121,9 +116,9 @@ def printResult(plain_text):
     print (result)
 
 def get_IV(length):
-    IV = input("enter the {} bit IV (string of bits represented by ints with no spaces)".format(length))
+    IV = input("enter the {} bit IV (string of bits represented by ints with no spaces) ".format(length))
     while(len(IV)!=length):
-        IV = input("Try again, IV must be 35 bits")
+        IV = input("Try again, IV must be {} bits ".format(length))
     IV = list(IV)
     IV = [int(i) for i in IV]
     return IV
@@ -370,20 +365,20 @@ def cfb_mode_decryption(IV, blocks, key, decoded_blocks):
 def ofb_mode(IV, blocks, key, encoded_blocks):
     xor_bits = []
     # encode IV and key
-    # xor reult with plaintext
     xor_IV_key = encode(IV,key)
+    # xor reult with plaintext
     plain_text = blocks[0]
     for i in range(0, len(plain_text)):
         xor_bits.append((plain_text[i]+ xor_IV_key[i])%2)
     # add to result
     encoded_blocks.append(xor_bits)
     blocks.pop(0)
-    # encode xor_bits and key
+    # Call resursively if more blocks remain
     if len(blocks) == 0:
         print_ciphertext(encoded_blocks, 'ofb_mode')        
     else:
         ofb_mode(xor_IV_key,blocks, key, encoded_blocks)   
-    # Call resursively if more blocks remain
+    
         
 def ofb_mode_decryption(IV,blocks, key, decoded_blocks):
     xor_bits = []
