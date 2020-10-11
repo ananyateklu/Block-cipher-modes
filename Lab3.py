@@ -40,7 +40,7 @@ def main():
     key = [int(i) for i in key]
     while(task != 'quit'):
         task = input("What would you like to do? type 1 for encrypt, 2 for decrypt, type 'quit' to exit ")
-        if task == '1':
+        if task == '1': # if user choses to encrypt
             task2 = input("What mode would you like to encrypt in? choose from(cbc,ofb,ctr,ecb,cfb) ")
             plaintext = input("Enter plaintext (of ascii characters)")
             if task2 == 'ecb':
@@ -68,7 +68,8 @@ def main():
                 print_ciphertext(encoded_blocks, "cfb_mode encryption")
             else:
                 print("try again input invalid")
-        elif task == '2':
+        
+        elif task == '2':# if user chooses to decrypt
             task2 = input("What mode would you like to decrypt in? choose from(cbc,ofb,ctr,ecb,cfb) ")
             ciphertext = input("Enter ciphertext (string of bits)")
             ciphertext = bin_to_blocks(ciphertext)
@@ -85,7 +86,6 @@ def main():
                 print(text)
             elif task2 == 'ecb':
                 ecb_mode_decrypt(ciphertext,key)
-        
             elif task2 == 'cfb':
                 IV = get_IV(35)
                 decoded_blocks = []
@@ -99,12 +99,11 @@ def main():
                 ofb_mode_decryption(IV,ciphertext, key, decoded_blocks)
                 groups = print_ciphertext(decoded_blocks, "ofb_decrypt in binary")
                 text = binary_to_text(groups)
-                print(text)  
-                
+                print(text)         
         else:
             if task != 'quit': 
                 print("invalid input, please only enter a given option")
-           
+## Helper functions and formating functions      
 def printResult(plain_text):
     result = '' 
     for i in range(0, len(plain_text)):
