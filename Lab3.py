@@ -42,7 +42,7 @@ def main():
         task = input("What would you like to do? type 1 for encrypt, 2 for decrypt, type 'quit' to exit ")
         if task == '1': # if user choses to encrypt
             task2 = input("What mode would you like to encrypt in? choose from(cbc,ofb,ctr,ecb,cfb) ")
-            filename = input("Input the a text file the plain text is in. Make sure the file is in the same directory")
+            filename = input("Input the a text file name the plain text is in. Make sure the file is in the same directory")
             theFile = open(filename +".txt","r")
             plaintext = theFile.read()
             if task2 == 'ecb':
