@@ -42,7 +42,9 @@ def main():
         task = input("What would you like to do? type 1 for encrypt, 2 for decrypt, type 'quit' to exit ")
         if task == '1': # if user choses to encrypt
             task2 = input("What mode would you like to encrypt in? choose from(cbc,ofb,ctr,ecb,cfb) ")
-            plaintext = input("Enter plaintext (of ascii characters)")
+            filename = input("Input the a text file the plain text is in. Make sure the file is in the same directory")
+            theFile = open(filename +".txt","r")
+            plaintext = theFile.read()
             if task2 == 'ecb':
                 ecb_mode(plaintext, key,)
             elif task2 == 'cbc':
@@ -71,7 +73,9 @@ def main():
         
         elif task == '2':# if user chooses to decrypt
             task2 = input("What mode would you like to decrypt in? choose from(cbc,ofb,ctr,ecb,cfb) ")
-            ciphertext = input("Enter ciphertext (string of bits)")
+            filename = input("Input the text file name the ciphertext is in. Make sure the file is in the same directory ")
+            theFile = open(filename +".txt","r")
+            ciphertext = theFile.read()
             ciphertext = bin_to_blocks(ciphertext)
             if task2 == 'cbc':
                 IV = get_IV(35)
