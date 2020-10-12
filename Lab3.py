@@ -2,147 +2,108 @@
 import math as m
 
 def main():
-       # decrypting melissa's cipher
-    ciphertext = input("enter ciphertext")
-    ciphertext = bin_to_blocks(ciphertext)
-    key = "11001101101111110111111001001110011"
-    # key = convert_bin(key)
-    IV = "10101110100001011110101001110110101"
-    IV = list(IV)
-    IV = [int(i) for i in IV]
-    key = list(key)
-    key = [int(i) for i in key] 
-    print(key)
-    decoded_blocks =[]
-    cbc_mode_decryption(IV, ciphertext, key, decoded_blocks)
-
-    # decrypting melissa's cipher
-    ciphertext = input("enter ciphertext")
-    ciphertext = bin_to_blocks(ciphertext)
-    decoded_blocks=[]
-    IV = "10101110100001011110101001110110101"
-    IV = list(IV)
-    IV = [int(i) for i in IV]
-    key = "a8*2)"
-    key = convert_bin(key)
-    print(key)
-    cbc_mode_decryption(IV, ciphertext, key, decoded_blocks)
-    # ofb_mode_decryption(IV,ciphertext, key, decoded_blocks)
-
-   
-    # get key and plaintext from user
-    task = input("What would you like to do? type 1 for encrypt, 2 for decrypt")
-    if task == '1':
-        task2 = input("What mode would you like to encrypt in? choose from(ecb,cbc,ofb,ctr,cfb)")
-        plaintext = input("Enter plaintext (of ascii characters)")
-        key = input("enter a key (string of bits represented by ints with no spaces)")
-        while(len(key)!=35):
-                key = input("Try again, key must be 35 bits")
-        key = list(key)
-        key = [int(i) for i in key] 
-        if task2 == 'ecb':
-            ecb_mode(plaintext, key,)
-        if task2 == 'cbc':
-            IV = input("enter the IV (string of bits represented by ints with no spaces)")
-            while(len(IV)!=35):
-                IV = input("Try again, IV must be 35 bits")
-            IV = list(IV)
-            IV = [int(i) for i in key]
-            blocks = to_blocks(plaintext)
-            encoded_blocks = []
-            cbc_mode(IV, blocks, key, encoded_blocks)
-        if task2 == 'ofb':
-            IV = input("enter the IV (string of bits represented by ints with no spaces)")
-            while(len(IV)!=35):
-                IV = input("Try again, IV must be 35 bits")
-            IV = list(IV)
-            IV = [int(i) for i in key]
-            blocks = to_blocks(plaintext)
-            encoded_blocks = []
-            ofb_mode(IV, blocks, key, encoded_blocks)
-        if task2 == 'ctr':
-            IV = input("enter the IV (string of bits represented by ints with no spaces)")
-            while(len(IV)!=19):
-                IV = input("Try again, IV must be 19 bits in order to make room for counter")
-            IV = list(IV)
-            IV = [int(i) for i in key]
-            blocks = to_blocks(plaintext)
-            encoded_blocks = []
-            ctr_mode(IV,blocks,key, encoded_blocks,0)
-        if task2 == 'cfb':
-            IV = input("enter the IV (string of bits represented by ints with no spaces)")
-            while(len(IV)!=35):
-                IV = input("Try again, IV must be 35 bits")
-            IV = list(IV)
-            IV = [int(i) for i in key]
-            blocks = to_blocks(plaintext)
-            encoded_blocks = []
-            cfb_mode(IV, blocks, key, encoded_blocks)
-    if task == '2':
-        task2 = input("What mode would you like to decrypt in? choose from(cbc,ctr)")
-        ciphertext = input("Enter ciphertext (string of bits)")
-        ciphertext = bin_to_blocks(ciphertext)
-        key = input("enter a key (string of bits represented by ints with no spaces)")
-        key = list(key)
-        key = [int(i) for i in key] 
-        if task2 == 'cbc':
-            IV = input("enter the IV (string of bits represented by ints with no spaces)")
-            while(len(IV)!=35):
-                IV = input("Try again, IV must be 35 bits")
-            IV = list(IV)
-            IV = [int(i) for i in key]
-            decoded_blocks= []
-            cbc_mode_decryption(IV, ciphertext, key, decoded_blocks)
-
-    else: 
-        print("invalid input, please only enter a given option")
-           
-
-    # ciphertext = input("Enter plaintext ")
+    # decrypting our cipher
+    # ciphertext = input("enter ciphertext")
     # ciphertext = bin_to_blocks(ciphertext)
-   
-    # ciphertext = list(ciphertext)
-    # ciphertext = [int(i) for i in ciphertext] 
-    # # print(ciphertext, "current")
-    # key = "a5Z#\t"
+    # key = "11001101101111110111111001001110011"
+    # # key = convert_bin(key)
+    # IV = "10101110100001011110101001110110101"
+    # IV = list(IV)
+    # IV = [int(i) for i in IV]
+    # key = list(key)
+    # key = [int(i) for i in key] 
+    # print(key)
+    # decoded_blocks =[]
+    # ofb_mode_decryption(IV,ciphertext, key, decoded_blocks)
+    # cbc_mode_decryption(IV, ciphertext, key, decoded_blocks)
+
+    # # decrypting melissa's cipher
+    # ciphertext = input("enter ciphertext")
+    # ciphertext = bin_to_blocks(ciphertext)
+    # decoded_blocks=[]
+    # IV = "10101110100001011110101001110110101"
+    # IV = list(IV)
+    # IV = [int(i) for i in IV]
+    # key = "a8*2)"
     # key = convert_bin(key)
     # print(key)
-    # decoded_blocks = []
-    # ciphertext = ecb_mode(ciphertext, key)
-    # print(ciphertext, "desired")
-    # cbc_mode_decryption([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], ciphertext, key, decoded_blocks)
-
-    # to encrypt and decrypt in ecb mode: 
-    # ciphertext = ecb_mode(plaintext, key)
-    # print(ciphertext)
-    # ecb_mode_decrypt(ciphertext, key)
-
-    # to encrypt and decrypt in cbc mode:
-    # blocks = [] 
-    # encoded_blocks = []
-    # blocks = to_blocks(plaintext)
-
-    # cbc_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
-    # ciphertext = encoded_blocks
-    # decoded_blocks = []
-    # cbc_mode_decryption([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], ciphertext, key, decoded_blocks)
-    # blocks = to_blocks(plaintext)
-    # encoded_blocks = []
-    # cfb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
-    # blocks = to_blocks(plaintext)
-    # encoded_blocks = []
-    # ofb_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], blocks, key, encoded_blocks)
-    # ciphertext = encoded_blocks
-    # decoded_blocks = []
-    # ofb_mode_decryption([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0], ciphertext, key, decoded_blocks)
-    # blocks = to_blocks(plaintext)
-    # encoded_blocks = []
-    # IV=[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-    # ctr_mode(IV,blocks,key,encoded_blocks,0)
-    # ctr_mode([1,0,1,0,0,1,0,1,0,1,0,1,0,1,1,1,0,1,0,1,0,1,0,1,0,],blocks,key,encoded_blocks,[0,0,0,0,0,0,0,0,0,0])
+    # cbc_mode_decryption(IV, ciphertext, key, decoded_blocks)
+    
 
 
-
+    # get key and plaintext from user
+    task =''
+    key = input("**enter a key (string of bits represented by ints with no spaces)**\n ***key remains the same until user quits*** ")
+    while(len(key)!=35):
+        key = input("Try again, key must have length of 35 ")
+    key = list(key)
+    key = [int(i) for i in key]
+    while(task != 'quit'):
+        task = input("What would you like to do? type 1 for encrypt, 2 for decrypt, type 'quit' to exit ")
+        if task == '1': # if user choses to encrypt
+            task2 = input("What mode would you like to encrypt in? choose from(cbc,ofb,ctr,ecb,cfb) ")
+            plaintext = input("Enter plaintext (of ascii characters)")
+            if task2 == 'ecb':
+                ecb_mode(plaintext, key,)
+            elif task2 == 'cbc':
+                IV = get_IV(35)
+                blocks = to_blocks(plaintext)
+                encoded_blocks = []
+                cbc_mode(IV, blocks, key, encoded_blocks)
+            elif task2 == 'ofb':
+                IV = get_IV(35)
+                blocks = to_blocks(plaintext)
+                encoded_blocks = []
+                ofb_mode(IV, blocks, key, encoded_blocks)
+            elif task2 == 'ctr':
+                IV = get_IV(19)
+                blocks = to_blocks(plaintext)
+                encoded_blocks = []
+                ctr_mode(IV,blocks,key, encoded_blocks,0)
+            elif task2 == 'cfb':
+                IV = get_IV(35)
+                blocks = to_blocks(plaintext)
+                encoded_blocks = []
+                cfb_mode(IV, blocks, key, encoded_blocks)
+                print_ciphertext(encoded_blocks, "cfb_mode encryption")
+            else:
+                print("try again input invalid")
+        
+        elif task == '2':# if user chooses to decrypt
+            task2 = input("What mode would you like to decrypt in? choose from(cbc,ofb,ctr,ecb,cfb) ")
+            ciphertext = input("Enter ciphertext (string of bits)")
+            ciphertext = bin_to_blocks(ciphertext)
+            if task2 == 'cbc':
+                IV = get_IV(35)
+                decoded_blocks= []
+                cbc_mode_decryption(IV, ciphertext, key, decoded_blocks)
+            elif task2 == 'ctr':
+                IV = get_IV(19)
+                decoded_blocks= []
+                ctr_mode(IV, ciphertext, key, decoded_blocks,0)
+                groups = print_ciphertext(decoded_blocks, "ctr_decrypt in binary")
+                text = binary_to_text(groups)
+                print(text)
+            elif task2 == 'ecb':
+                ecb_mode_decrypt(ciphertext,key)
+            elif task2 == 'cfb':
+                IV = get_IV(35)
+                decoded_blocks = []
+                cfb_mode_decryption(IV, ciphertext, key, decoded_blocks)
+                groups = print_ciphertext(decoded_blocks, "cfb_decrypt in binary")
+                text = binary_to_text(groups)
+                print(text)
+            elif task2 == 'ofb':
+                IV = get_IV(35)
+                decoded_blocks = []
+                ofb_mode_decryption(IV,ciphertext, key, decoded_blocks)
+                groups = print_ciphertext(decoded_blocks, "ofb_decrypt in binary")
+                text = binary_to_text(groups)
+                print(text)         
+        else:
+            if task != 'quit': 
+                print("invalid input, please only enter a given option")
+## Helper functions and formating functions      
 def printResult(plain_text):
     result = '' 
     for i in range(0, len(plain_text)):
@@ -153,7 +114,13 @@ def printResult(plain_text):
             plain_text[i] = plain_text[i]+"\n"
     print (result)
 
-
+def get_IV(length):
+    IV = input("enter the {} bit IV (string of bits represented by ints with no spaces) ".format(length))
+    while(len(IV)!=length):
+        IV = input("Try again, IV must be {} bits ".format(length))
+    IV = list(IV)
+    IV = [int(i) for i in IV]
+    return IV
 
 def convert_bin(acii):
     decimal_vals = []
@@ -345,47 +312,72 @@ def cbc_mode_decryption(IV, blocks, key, encoded_blocks):
         # add xor_bits to result as plain text
         encoded_blocks.append(xor_bits)
         IV = ciphertext
-    groups = print_ciphertext(encoded_blocks, 'cbc_mode_decryption')
+    groups = print_ciphertext(encoded_blocks, 'cbc_mode_decryption in Binary : ')
     text = binary_to_text(groups)
+    print("decryption in ASCII chars:")
     print(text)
+
+
 def cfb_mode(IV, blocks, key, encoded_blocks):
-    xor_bits = []
+    encoded_bits = []
     # encode IV and key
-    xor_bits = encode(IV, key)
+    encoded_bits = encode(IV, key)
     # xor result with plaintext
     plain_text = blocks[0]
     xor_bits = []
     for i in range(0, len(plain_text)):
-        xor_bits.append((plain_text[i]+ IV[i])%2)
+        xor_bits.append((plain_text[i]+ encoded_bits[i])%2)
     # add to result
-    encoded_blocks.insert(0, xor_bits)
+    encoded_blocks.append(xor_bits)
     blocks.pop(0)
+    # Call recursivly if more blocks remain
+    length = len(blocks)
+    # Print results if done
+    if length == 0:
+        # print_ciphertext(encoded_blocks, 'cfb_mode')
+        return encoded_blocks
+    else:
+        cfb_mode(xor_bits, blocks, key, encoded_blocks) 
+
+def cfb_mode_decryption(IV, blocks, key, decoded_blocks):
+    encoded_bits = []
+    # encode IV and key
+    encoded_bits = encode(IV, key)
+    # xor result with plaintext
+    ciphertext = blocks[0]
+    plaintext = []
+    for i in range(0, len(ciphertext)):
+        plaintext.append((ciphertext[i]+ encoded_bits[i])%2)
+    # add to result
+    decoded_blocks.append(plaintext)
+    pop = blocks.pop(0)
     # encode xor_bits and key
     # Call recursivly if more blocks remain
     length = len(blocks)
     # Print results if done
     if length == 0:
-        print_ciphertext(encoded_blocks, 'cfb_mode')
+        print_ciphertext(decoded_blocks, 'cfb_mode_decryption')
+        return decoded_blocks
     else:
-        cfb_mode(xor_bits, blocks, key, encoded_blocks) 
+        cfb_mode(pop, blocks, key, decoded_blocks)        
 
 def ofb_mode(IV, blocks, key, encoded_blocks):
     xor_bits = []
     # encode IV and key
-    # xor reult with plaintext
     xor_IV_key = encode(IV,key)
+    # xor reult with plaintext
     plain_text = blocks[0]
     for i in range(0, len(plain_text)):
         xor_bits.append((plain_text[i]+ xor_IV_key[i])%2)
     # add to result
     encoded_blocks.append(xor_bits)
     blocks.pop(0)
-    # encode xor_bits and key
+    # Call resursively if more blocks remain
     if len(blocks) == 0:
         print_ciphertext(encoded_blocks, 'ofb_mode')        
     else:
         ofb_mode(xor_IV_key,blocks, key, encoded_blocks)   
-    # Call resursively if more blocks remain
+    
         
 def ofb_mode_decryption(IV,blocks, key, decoded_blocks):
     xor_bits = []
@@ -439,6 +431,7 @@ def ctr_mode(IV,blocks,key, encoded_blocks,count):
         print_ciphertext(encoded_blocks, 'ctr_mode')         
     else:
         ctr_mode(IV,blocks,key, encoded_blocks,count)
+    return encoded_blocks
     
     
 
