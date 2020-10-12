@@ -2,7 +2,7 @@
 import math as m
 
 def main():
-    # decrypting melissa's cipher
+       # decrypting melissa's cipher
     ciphertext = input("enter ciphertext")
     ciphertext = bin_to_blocks(ciphertext)
     key = "11001101101111110111111001001110011"
@@ -23,20 +23,13 @@ def main():
     IV = "10101110100001011110101001110110101"
     IV = list(IV)
     IV = [int(i) for i in IV]
-    key = "a8*2)"clea
+    key = "a8*2)"
     key = convert_bin(key)
     print(key)
     cbc_mode_decryption(IV, ciphertext, key, decoded_blocks)
     # ofb_mode_decryption(IV,ciphertext, key, decoded_blocks)
 
    
-
-    
-
-
-
-
-    
     # get key and plaintext from user
     task = input("What would you like to do? type 1 for encrypt, 2 for decrypt")
     if task == '1':
@@ -86,7 +79,7 @@ def main():
             encoded_blocks = []
             cfb_mode(IV, blocks, key, encoded_blocks)
     if task == '2':
-        task2 = input("What mode would you like to decrypt in? choose from(cbc,ofb)")
+        task2 = input("What mode would you like to decrypt in? choose from(cbc,ctr)")
         ciphertext = input("Enter ciphertext (string of bits)")
         ciphertext = bin_to_blocks(ciphertext)
         key = input("enter a key (string of bits represented by ints with no spaces)")
