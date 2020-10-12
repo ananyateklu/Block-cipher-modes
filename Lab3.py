@@ -424,7 +424,7 @@ def ctr_mode(IV,blocks,key, encoded_blocks,count):
     plain_text = blocks[0]
     for i in range(0, len(plain_text)):
         xor_bits.append((encoded_block[i]+ plain_text[i]) %2)
-    encoded_blocks.insert(0, xor_bits)
+    encoded_blocks.append(xor_bits)
     count = count +1
     blocks.pop(0)
     if len(blocks) == 0:
